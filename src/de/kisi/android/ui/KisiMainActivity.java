@@ -51,7 +51,9 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 	//private LockListAdapter mLockListAdapter; 
 	private ActionBarDrawerToggle mDrawerToggle;
 	private int selectedPosition = 0;
-
+	
+	private TextView settingsView;
+	
 	private MergeAdapter  mMergeAdapter;
 
 	private Place mPlace = null;
@@ -170,9 +172,9 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 			if (fragmentStack.size()>0){
 				BaseFragment oldFragment = fragmentStack.peek();
 				if (oldFragment.getClass().equals(fragment.getClass())){
-					if( oldFragment.place== null && fragment.place == null){
+					if( oldFragment.getPlace()== null && fragment.getPlace() == null){
 						return;
-					}else if (oldFragment.place!= null && fragment.place != null && oldFragment.place.getId() == fragment.place.getId()){
+					}else if (oldFragment.getPlace()!= null && fragment.getPlace() != null && oldFragment.getPlace().getId() == fragment.getPlace().getId()){
 						return;
 					}
 				}
@@ -258,6 +260,10 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 		}
 		else {
 			mDrawerList.setItemChecked(2, true);
+		}
+		if(settingsView!=null){
+			settingsView.setTextColor(Color.BLACK);
+			settingsView=null;
 		}
 		closeDrawer();
 		return (LockListFragment) fragmentStack.peek();
@@ -531,7 +537,15 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 		mMergeAdapter.addView(divider);
 	}
 
-	protected void setActiveView(View view){
+	protected void setActiveSettingsView(View view, int position){
+		if(settingsView!=null){
+			settingsView.setTextColor(Color.BLACK);
+			settingsView=null;
+		}
+		mDrawerListAdapter.selectItem(-1);
+		mDrawerList.setItemChecked(6+position+mDrawerListAdapter.getCount(), true);
+		settingsView = (TextView)view; 
+		settingsView.setTextColor(Color.WHITE);
 	}
 
 }

@@ -90,7 +90,9 @@ public class LogInfoFragment extends BaseFragment implements LogsCallback{
 
 	@Override
 	public String getName() {
-		return place.getName();
+		if(place!=null)
+			return place.getName();
+		return "";
 	}
 
 	@Override

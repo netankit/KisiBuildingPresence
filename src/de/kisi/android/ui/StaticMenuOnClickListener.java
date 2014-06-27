@@ -69,7 +69,7 @@ public class StaticMenuOnClickListener implements OnClickListener {
 			
 			
 		case R.id.notification_settings_button:
-			activity.setActiveView(v);
+			activity.setActiveSettingsView(v,2);
 
 			activity.setFragment(new PlaceNotificationSettingsFragment());
 			return;

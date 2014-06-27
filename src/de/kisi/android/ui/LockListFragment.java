@@ -2,14 +2,10 @@ package de.kisi.android.ui;
 
 import de.kisi.android.R;
 import de.kisi.android.api.KisiAPI;
-import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 
 public class LockListFragment extends BaseFragment{
@@ -24,17 +20,11 @@ public class LockListFragment extends BaseFragment{
 	private int lockId;
 	private String sender;
 	
-	public LockListFragment(){
-		super();
-		Log.i("fragment","locklistfragment");
-	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		mLockList = (ListView) inflater.inflate(R.layout.lock_list, container, false);
 
-		Log.i("fragment","id:"+id);
-		Log.i("fragment","place "+place);
 		mLockListAdapter = new LockListAdapter(getActivity(), place);
 		mLockList.setAdapter(mLockListAdapter);
 		mLockList.setOnItemClickListener(new LockListOnItemClickListener(place));
@@ -81,13 +71,9 @@ public class LockListFragment extends BaseFragment{
 
 	}
 	public void highlightButton(int lockId){
-		Log.i("fragment","highlight "+id+" / lock "+lockId);
 		if(viewCreated){
-		int mActivePosition = mLockListAdapter.getItemPosition(lockId);
-		mLockListAdapter.addSuggestedNFC(lockId);
-		mLockList.invalidate();
-		Button highlightElement = (Button)mLockList.getAdapter().getView(mActivePosition, null, null);
-		highlightElement.setBackgroundColor(Color.BLACK);
+			mLockListAdapter.addSuggestedNFC(lockId);
+			mLockList.invalidate();
 		}else{
 			highlightInProgress = true;
 			this.lockId = lockId;

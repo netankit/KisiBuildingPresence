@@ -7,17 +7,12 @@ import android.util.Log;
 public abstract class BaseFragment extends Fragment{
 
 	protected Place place;
-	protected static int ids = 0;
-	protected int id;
-	public BaseFragment(){
-		id = ids++;
-		Log.i("fragment","id "+id);
-	}
-	public void setPlace(Place place){
+
+	protected void setPlace(Place place){
 		this.place = place;
 	}
 
-	public Place setPlace(){
+	protected Place getPlace(){
 		return place;
 	}
 	
