@@ -27,19 +27,18 @@ public class KisiWifiManager {
 	}
 	
 	public void turnOffWifi() {
-//TODO:uncomment this for release
 		
-		//		previousWifiState = mWifiManager.isWifiEnabled();
-//		if(previousWifiState == false) {
-//			return;
-//		} else {
-//			//check if the devices is a Nexus 4 
-//			if(!android.os.Build.MODEL.equals("Nexus 4")) {
-//				return;
-//			} else {
-//				mWifiManager.setWifiEnabled(false);
-//			}
-//		}
+		previousWifiState = mWifiManager.isWifiEnabled();
+		if(previousWifiState == false) {
+			return;
+		} else {
+			//check if the devices is a Nexus 4 
+			if(!android.os.Build.MODEL.equals("Nexus 4")) {
+				return;
+			} else {
+				mWifiManager.setWifiEnabled(false);
+			}
+		}
 	}
 	
 	public void turnOnWifi() {

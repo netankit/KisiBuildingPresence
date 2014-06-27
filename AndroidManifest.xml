@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.kisi.android"
     android:versionCode="23"
-    android:versionName="2.2.0-newUI" >
+    android:versionName="2.2.0" >
 
     <uses-sdk
         android:minSdkVersion="15"

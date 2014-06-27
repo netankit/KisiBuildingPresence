@@ -58,6 +58,7 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 
 
 	private TextView accountName;
+	private TextView title;
 
 	// just choose a random value
 	// TODO: change this later
@@ -86,24 +87,27 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 
 		mDrawerList.setAdapter(mMergeAdapter);
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-		getActionBar().setHomeButtonEnabled(true);
-		getActionBar().setDisplayShowHomeEnabled(true);	
-		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_USE_LOGO);		
+		getActionBar().setCustomView(R.layout.abs_layout);
+		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_USE_LOGO | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);		
+		
+		title = (TextView) getActionBar().getCustomView().findViewById(R.id.actionbar_title);
+		
+		
 		mDrawerToggle = new ActionBarDrawerToggle( this,  mDrawerLayout, R.drawable.ic_drawer,  R.string.place_overview,  R.string.kisi ) {
 			public void onDrawerClosed(View view) {
 				super.onDrawerClosed(view);
 				String newTitle = fragmentStack.peek().getName();
-				getActionBar().setTitle(newTitle);
+				//getActionBar().setTitle(newTitle);
+				title.setText(newTitle);
 				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 			}
 
-			public void onDrawerOpened(View drawerView) {
-				super.onDrawerOpened(drawerView);
-				getActionBar().setTitle(getResources().getString(R.string.place_overview));
-				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-			}
-		};
-
+	            public void onDrawerOpened(View drawerView) {
+	                super.onDrawerOpened(drawerView);
+	                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+	            }
+		 };
+		 
 		mDrawerLayout.setDrawerListener(mDrawerToggle);	 
 
 
@@ -217,7 +221,11 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 		accountName.setText(KisiAPI.getInstance().getUser() == null ?  " " : KisiAPI.getInstance().getUser().getEmail() );
 		if(place != null) {
 			// - 2 cause there are 2 elements before the places start in the ListView (TextView and the divider)
-			selectItem(selectedPosition + 2, mDrawerListAdapter.getItemId(selectedPosition));
+			selectItem(selectedPosition + 2 , mDrawerListAdapter.getItemId(selectedPosition));
+        	if (place != null){
+        		String newTitle = place.getName();
+        		title.setText(newTitle);
+        	}
 		}
 		else {
 			KisiAPI.getInstance().updatePlaces(this);
@@ -227,8 +235,10 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 
 	private LockListFragment selectItem(int position, long id) {
 		Place place = KisiAPI.getInstance().getPlaceById((int) id);
-
-
+		if(place != null) {
+			title.setText(place.getName());
+	    	mPlace = place;
+		}
 		// - 2 cause there are 2 elements before the places start in the ListView (TextView and the divider)
 		selectedPosition = position - 2;
 		mDrawerListAdapter.selectItem(position - 2);
@@ -315,6 +325,7 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 	}
 
 
+	
 	private void handleIntent(Intent intent) {
 		// No extras, nothing to do
 		if (intent.getExtras() == null)

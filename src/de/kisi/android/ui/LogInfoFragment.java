@@ -1,5 +1,7 @@
 package de.kisi.android.ui;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -78,7 +80,8 @@ public class LogInfoFragment extends BaseFragment implements LogsCallback{
 	        TextView eventTextView = (TextView) vi.findViewById(R.id.logEventTextView);
 	        eventTextView.setText(events.get(position).getMessage());
 	        TextView dateTextView = (TextView) vi.findViewById(R.id.logDateTextVIew);
-	        dateTextView.setText(events.get(position).getCreatedAt().toLocaleString());
+	        SimpleDateFormat df = new SimpleDateFormat();
+	        dateTextView.setText(df.format(events.get(position).getCreatedAt()));
 	        return vi;
 		}
 		

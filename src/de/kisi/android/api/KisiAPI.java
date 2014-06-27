@@ -1,6 +1,6 @@
 package de.kisi.android.api;
 
-
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -169,8 +169,9 @@ public class KisiAPI {
 	 *         with the user
 	 */
 	public boolean userIsOwner(Place place) {
-		if (place == null || getUser()== null)
+		if(place == null || getUser() == null) {
 			return false;
+		}
 		return place.getOwnerId() == this.getUser().getId();
 	}
 	
@@ -272,7 +273,7 @@ public class KisiAPI {
 			public void onSuccess(JSONArray jsonArray) {
 				List<Event> events = new LinkedList<Event>();
 				GsonBuilder gb = new GsonBuilder();
-				gb.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+				gb.registerTypeAdapter(Date.class, new DateDeserializer());
 				Gson gson = gb.create();
 				for(int i = 0; i < jsonArray.length(); i++) {
 					Event event = null;

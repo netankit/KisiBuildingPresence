@@ -14,6 +14,7 @@ import de.kisi.android.KisiApplication;
 import de.kisi.android.R;
 import de.kisi.android.api.KisiAPI;
 
+
 public class StaticMenuOnClickListener implements OnClickListener {
 	private KisiMainActivity activity;
 	

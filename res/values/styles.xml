@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -19,6 +19,22 @@
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:textAppearance">?android:attr/textAppearanceListItemSmall</item>
+    </style>
+
+    
+    
+    <!-- this style prevents the app to show a title in the actionbar before the custom layout (abs_layout.xml) is set -->
+    <style name="ActionBarWithoutTitle" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/ActionBarWithoutTitle.ActionBarStyle</item>
+    </style>
+
+    <style name="ActionBarWithoutTitle.ActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:titleTextStyle">@style/ActionBarWithoutTitle.ActionBar.TitleTextStyle</item>
+    </style>
+
+    <style name="ActionBarWithoutTitle.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">#00ffffff</item>
+        
     </style>
 
     <!-- Application theme. -->

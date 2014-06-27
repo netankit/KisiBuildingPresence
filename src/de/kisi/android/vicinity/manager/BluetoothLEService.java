@@ -105,7 +105,9 @@ public class BluetoothLEService extends IntentService implements IBeaconConsumer
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// check if foreground mode is requested
-		Log.d("onStartCommand intent:", intent.toString());
+		if(intent == null) {
+			return -1;
+		}
 		if(intent.getExtras()!=null && intent.getExtras().getBoolean("foreground", false)){
 			// foreground mode needs a permanent notification to run on level 1
 			// if the notification is not valid, e.g. no notification shows up
