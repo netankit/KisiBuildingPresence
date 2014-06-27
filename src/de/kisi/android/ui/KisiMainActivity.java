@@ -139,7 +139,10 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 			super.onBackPressed();
 			return;
 		}
-		fragmentStack.pop();
+		if (fragmentStack.pop() instanceof LockListFragment){
+			super.onBackPressed();
+			return;
+		}
 		setFragment(fragmentStack.pop());
 	}
 
@@ -176,7 +179,8 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 			}
 		}
 
-		getActionBar().setTitle(fragment.getName());
+		//getActionBar().setTitle(fragment.getName());
+		title.setText(fragment.getName());
 
 		FragmentManager fragmentManager = getFragmentManager();
 		fragmentStack.push(fragment);
@@ -528,7 +532,6 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 	}
 
 	protected void setActiveView(View view){
-		mMergeAdapter.setActive(view, false);
 	}
 
 }
