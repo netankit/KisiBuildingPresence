@@ -36,6 +36,7 @@ public abstract class GenericCall {
 	}
 
 	public final void send() {
+		json = new JSONObject();
 		createJson();
 		if(!createJsonCalled)
 			throw new RuntimeException("Overwritten createJson() must call super.createJson()");
@@ -52,7 +53,7 @@ public abstract class GenericCall {
 			
 			@Override
 			public void onSuccess(JSONArray response) {
-				Log.d("GenericCall", "call success: " + response.toString());
+				Log.d("GenericCall", "call success: " + response);
 				if (call.handler != null) {
 					call.handler.onSuccess(response);
 				}
@@ -60,8 +61,8 @@ public abstract class GenericCall {
 
 
 			public void onFailure(int statusCode, Throwable e, JSONObject response) {
-				Log.d("GenericCall", "call failed: "+response.toString());
-
+				Log.d("GenericCall", "call failed: "+response);
+				
 				if (checkOptimisticSignIn(statusCode))
 					if (call.handler != null)
 						call.handler.onFailure(statusCode, e, response);

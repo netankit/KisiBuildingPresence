@@ -18,45 +18,27 @@ import de.kisi.android.api.LogsCallback;
 import de.kisi.android.model.Event;
 import de.kisi.android.model.Place;
 
-public class LogInfo extends Activity implements LogsCallback{
+public class LogInfoFragment extends BaseFragment implements LogsCallback{
 
 	
 	private ListView mListView;
 	
-	
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		setContentView(R.layout.loginfo);
-		//add back button to action bar 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		
-		mListView = (ListView) findViewById(R.id.place_notification_listview);
-		int placeId = getIntent().getIntExtra("place_id", 0);
-		if(placeId != 0) {
-			Place place = KisiAPI.getInstance().getPlaceById(placeId);
-			KisiAPI.getInstance().getLogs(place, this);
-			getActionBar().setTitle(place.getName());
-		}
-		
-
-	}
-	
-	//listener for the backbutton of the action bar
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-       switch (item.getItemId()) {
-        case android.R.id.home:
-            finish();
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-	}
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+		View view = inflater.inflate(R.layout.loginfo, container, false);
+        mListView =  (ListView)view.findViewById(R.id.place_notification_listview);
+		KisiAPI.getInstance().getLogs(place, this);
+		return view;
+    }
 
 	@Override
 	public void onLogsResult(List<Event> events) {
-		mListView.setAdapter(new LogAdapter(events));
+		try{
+			mListView.setAdapter(new LogAdapter(events));
+		}catch(Exception e){
+			
+		}
 	}
 	
 	
@@ -69,7 +51,7 @@ public class LogInfo extends Activity implements LogsCallback{
 		public LogAdapter(List<Event> events) {
 			super();
 			this.events = events;
-			inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		}
 
 		@Override
@@ -100,6 +82,17 @@ public class LogInfo extends Activity implements LogsCallback{
 	        return vi;
 		}
 		
+	}
+
+
+	@Override
+	public String getName() {
+		return place.getName();
+	}
+
+	@Override
+	public int getMenuId() {
+		return R.menu.log_info;
 	}
 	
 }

@@ -40,51 +40,31 @@
         android:name="de.kisi.android.KisiApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:logo="@drawable/ic_actionbar_icon"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        android:logo="@drawable/ic_actionbar_icon" >
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
         <!-- UI Activities -->
-         <activity
-            android:name=".account.AccountActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/app_name"
+
+        <activity
+            android:name=".ui.KisiMainActivity"
+            android:configChanges="orientation"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/CustomThemeLogin" >
-        </activity>
-        <activity android:name=".ui.PlaceNotificationSettings"
-             android:screenOrientation="portrait"
-             android:configChanges="orientation"
-             android:theme="@android:style/Theme.Holo.Light">
-        </activity>
-        <activity android:name=".ui.KisiMainActivity" 
-            android:screenOrientation="portrait"
-            android:configChanges="orientation"
-            android:theme="@android:style/Theme.Holo.Light" 
-            android:launchMode="singleTop">
-              <intent-filter android:label="@string/app_name" >
+            android:theme="@android:style/Theme.Holo.Light" >
+            <intent-filter android:label="@string/app_name" >
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- UI Activities end -->
         
-        <activity
-            android:name="de.kisi.android.ui.ShareKeyActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Light" >
-        </activity>
-        <activity
-            android:name="de.kisi.android.ui.LogInfo"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Light" >
-        </activity>
+        <!-- Blinkup -->
+
         <activity
             android:name="com.electricimp.blinkup.WifiSelectActivity"
             android:configChanges="orientation"
@@ -109,20 +89,18 @@
             android:name="com.electricimp.blinkup.InterstitialActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-         <activity
+        <activity
             android:name=".ui.AccountPickerActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/CustomThemeLogin" />
-
-          <activity
+        <activity
             android:name="de.kisi.android.ui.BlinkupCompleteActivity"
+            android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:configChanges="orientation" />
-         
-  
- 
-        <!-- UI Activities end -->
+            android:theme="@style/CustomThemeLogin" />
+
+        <!-- Blinkup end -->
 
 
         <!-- Start on Boot -->
@@ -172,6 +150,8 @@
         <activity
             android:name=".account.AccountActivity"
             android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/CustomThemeLogin" >
         </activity>
@@ -214,7 +194,7 @@
             </intent-filter>
             <!--
                  This intent-filter is only needed to detect empty NFC Tags, in case we allow the
-		         user to write their own tags
+		         user to write their own tags
             -->
             <!--
 		    <intent-filter>
@@ -222,7 +202,7 @@
 		    </intent-filter>
 		    <meta-data
 		        android:name="android.nfc.action.TECH_DISCOVERED"
-		        android:resource="@xml/nfc_tech_filter" />
+		        android:resource="@xml/nfc_tech_filter" />
             -->
         </activity>
         <!-- NFC end -->

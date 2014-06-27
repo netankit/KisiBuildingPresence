@@ -23,7 +23,9 @@ public class StaticMenuOnClickListener implements OnClickListener {
 	
 	@Override
 	public void onClick(View v) {			
-		
+
+		activity.closeDrawer();
+
 		switch(v.getId()) {
 			case R.id.refreshButton:
 				KisiAPI.getInstance().refresh(activity);
@@ -66,8 +68,9 @@ public class StaticMenuOnClickListener implements OnClickListener {
 			
 			
 		case R.id.notification_settings_button:
-			Intent settingsIntent = new Intent(activity, PlaceNotificationSettings.class);
-			activity.startActivity(settingsIntent);
+			activity.setActiveView(v);
+
+			activity.setFragment(new PlaceNotificationSettingsFragment());
 			return;
 			
 

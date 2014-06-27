@@ -20,21 +20,20 @@ import de.kisi.android.model.Place;
 public class LockListAdapter extends BaseAdapter {
 
 	private Context mContext;
-	private int placeId;
+	private Place place;
 	private String trigger;
 	private HashSet<Integer> suggestedNFC;
 	private Hashtable<Integer,Button> buttonList;
 
-	public LockListAdapter(Context context, int  placeId) {
+	public LockListAdapter(Context context, Place place) {
 		this.mContext = context;
-		this.placeId = placeId;
+		this.place = place;
 		suggestedNFC = new HashSet<Integer>();
 		buttonList = new Hashtable<Integer,Button>();
 	}
 	
 	@Override
 	public int getCount() {
-		Place place = KisiAPI.getInstance().getPlaceById(placeId);
 		if(place != null) {
 			List<Lock> locks = place.getLocks();	
 			if(locks != null) {
@@ -63,7 +62,6 @@ public class LockListAdapter extends BaseAdapter {
 	
 	@Override
 	public Object getItem(int position) {
-		Place place = KisiAPI.getInstance().getPlaceById(placeId);
 		if(place != null) {
 			List<Lock> locks = place.getLocks();	
 			if(locks != null) {
@@ -75,10 +73,9 @@ public class LockListAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {;
-		Place place = KisiAPI.getInstance().getPlaceById(placeId);
 		if(place != null) {
 			List<Lock> locks = place.getLocks();	
-			if(locks != null) {
+			if(locks != null && locks.size()>position) {
 				return locks.get(position).getId();
 			}
 		}
@@ -87,7 +84,6 @@ public class LockListAdapter extends BaseAdapter {
 	
 	
 	public int getItemPosition(long id) {
-		Place place = KisiAPI.getInstance().getPlaceById(placeId);
 		if(place != null) {
 			List<Lock> locks = place.getLocks();	
 			for(int position = 0; position < locks.size(); position++) {
@@ -104,7 +100,6 @@ public class LockListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Place place = KisiAPI.getInstance().getPlaceById(placeId);
 		Lock lock = place.getLocks().get(position);
 		Log.i("getView",""+position);
 		Button button;
@@ -132,7 +127,7 @@ public class LockListAdapter extends BaseAdapter {
 	
 	
 	public Place getPlace() {
-		return KisiAPI.getInstance().getPlaceById(placeId);
+		return place;
 	}
 
 }

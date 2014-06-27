@@ -1,6 +1,5 @@
 package de.kisi.android.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,21 +18,20 @@ import de.kisi.android.api.KisiAPI;
 import de.kisi.android.model.Place;
 
 
-public class PlaceNotificationSettings extends Activity implements OnClickListener {
+public class PlaceNotificationSettingsFragment extends BaseFragment implements OnClickListener {
 
 	private ListView mListView;
 	
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setTitle(getResources().getString(R.string.notification_settings));
-		setContentView(R.layout.place_notification_settings);
-		mListView = (ListView) findViewById(R.id.place_notification_listview);
-		mListView.setAdapter(new PlaceNotificationAdapter(this));
-//		buildShareDialog();
-	}
+	@Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View layout =  inflater.inflate(R.layout.place_notification_settings, container, false);
+        mListView = (ListView) layout.findViewById(R.id.place_notification_listview);
+        mListView.setAdapter(new PlaceNotificationAdapter(getActivity()));
+        
 
-	
+		return layout;
+    }
 	
 	
 	class PlaceNotificationAdapter extends BaseAdapter {
@@ -44,7 +42,7 @@ public class PlaceNotificationSettings extends Activity implements OnClickListen
 		public PlaceNotificationAdapter(Context context) {
 			super();
 			this.context = context;
-			inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		}
 		
 		@Override
@@ -92,53 +90,13 @@ public class PlaceNotificationSettings extends Activity implements OnClickListen
 	
 	
 	
-//	private void buildShareDialog() {
-//		final Place[] places = KisiAPI.getInstance().getPlaces();
-//
-//		// Getting px form Scale-independent Pixels
-//		Resources r = getResources();
-//		int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
-//				350, r.getDisplayMetrics());
-//		int height = (int) TypedValue.applyDimension(
-//				TypedValue.COMPLEX_UNIT_SP, 50, r.getDisplayMetrics());
-//
-//		
-//		Typeface font = Typeface.createFromAsset(this.getApplicationContext().getAssets(), "Roboto-Light.ttf");
-//		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.place_linear_layout);
-//		
-//		LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//		
-//		for (final Place p : places) {
-//			
-//			final Switch placeSwitch =  (Switch) li.inflate(R.layout.place_notification_switch, null); 
-//			placeSwitch.setText(p.getName() + "\t");
-//			placeSwitch.setChecked(p.getNotificationEnabled());
-//			placeSwitch.setTypeface(font);
-//			placeSwitch.setGravity(Gravity.LEFT);
-//			placeSwitch.setHeight(height);
-//			placeSwitch.setTextColor(Color.DKGRAY);
-//			placeSwitch.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-//			placeSwitch.setVisibility(View.VISIBLE);
-//			linearLayout.addView(placeSwitch);
-//			placeSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-//
-//				@Override
-//				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//					p.setNotificationEnabled(isChecked);
-//				} 
-//				
-//			});
-//
-//		}
-//
-//	}
 	
 	//listener for the backbutton of the action bar
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
        switch (item.getItemId()) {
         case android.R.id.home:
-            finish();
+            getActivity().onBackPressed();
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -147,8 +105,17 @@ public class PlaceNotificationSettings extends Activity implements OnClickListen
 
 	@Override
 	public void onClick(View v) {
-		finish();
+		getActivity().onBackPressed();
 	}
 
+	@Override
+	public String getName(){
+		return "Notification Settings";
+	}
+
+	@Override
+	public int getMenuId() {
+		return R.menu.notification_setting;
+	}
 
 }

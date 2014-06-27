@@ -203,5 +203,9 @@ public class Place {
 		this.suggestUnlock = suggestUnlock;
 	}
 
+	@Override
+	public String toString(){
+		return "Place: "+getId();
+	}
 	
 }

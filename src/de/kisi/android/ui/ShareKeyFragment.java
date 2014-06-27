@@ -3,16 +3,15 @@ package de.kisi.android.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -25,22 +24,24 @@ import de.kisi.android.api.KisiAPI;
 import de.kisi.android.model.Lock;
 import de.kisi.android.model.Place;
 
-public class ShareKeyActivity extends Activity {
+public class ShareKeyFragment extends BaseFragment {
 
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);		
-		setContentView(R.layout.share_key_activity);
-		
-		int placeId = getIntent().getExtras().getInt("place");
-		buildShareDialog(KisiAPI.getInstance().getPlaceById(placeId));
-		//add back button to action bar 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-	}	
+	private View view;
+	
+	
+	@Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        view =  inflater.inflate(R.layout.share_key_activity, container, false);
+		buildShareDialog(place);
+		return view;
+    }
+	
 	
 	
 	private void buildShareDialog(final Place place) {
 		final List<Lock> locks = place.getLocks();
-		LinearLayout linearLayout = (LinearLayout)findViewById(R.id.place_linear_layout);
+		LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.place_linear_layout);
 		
 		final List<Lock> sendlocks = new ArrayList<Lock>();
 		
@@ -51,13 +52,13 @@ public class ShareKeyActivity extends Activity {
 		int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 15, r.getDisplayMetrics());
 
 		LinearLayout.LayoutParams layoutParams;
-		final EditText emailInput = (EditText) findViewById(R.id.shareEmailInput);
+		final EditText emailInput = (EditText) view.findViewById(R.id.shareEmailInput);
 		
 		layoutParams = new LinearLayout.LayoutParams(width, height);
 		layoutParams.setMargins(margin, margin, margin, margin);
 		for (final Lock lock : locks) {
 			
-			LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater li = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			CheckBox checkBox = (CheckBox) li.inflate(R.layout.share_checkbox, null);
 			checkBox.setText(lock.getName());	
 			checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener(){
@@ -101,7 +102,7 @@ public class ShareKeyActivity extends Activity {
 			linearLayout.addView(checkBox, layoutParams);
 		}
 		
-		Button submit = new Button(this);
+		Button submit = new Button(getActivity());
 		submit.setText(getResources().getString(R.string.share_submit_button));
 		submit.setTextColor(Color.DKGRAY);
 		submit.setTextSize(25);
@@ -112,32 +113,35 @@ public class ShareKeyActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				if(sendlocks.isEmpty()){
-					Toast.makeText(getApplicationContext(), R.string.share_error, Toast.LENGTH_LONG).show();
+					Toast.makeText(getActivity().getApplicationContext(), R.string.share_error, Toast.LENGTH_LONG).show();
 					return;
 				}
 				String email = emailInput.getText().toString();
 				if(email.isEmpty()) {
-					Toast.makeText(getApplicationContext(), R.string.share_error_empty_email, Toast.LENGTH_LONG).show();
+					Toast.makeText(getActivity().getApplicationContext(), R.string.share_error_empty_email, Toast.LENGTH_LONG).show();
 					return;
 				}
 				KisiAPI.getInstance().createNewKey(place, email, sendlocks);
-				finish();
+				getActivity().onBackPressed();
 			}
 		});
 		linearLayout.addView(submit, layoutParams);
 
 	}
-	
-	//listener for the back button in the action bar
+
+
+
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-       switch (item.getItemId()) {
-        case android.R.id.home:
-            finish();
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
-        }
+	public String getName() {
+		return place.getName();
 	}
+
+
+
+	@Override
+	public int getMenuId() {
+		return R.menu.share_key;
+	}
+	
 
 }
