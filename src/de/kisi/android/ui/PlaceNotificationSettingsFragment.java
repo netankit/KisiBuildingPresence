@@ -72,8 +72,14 @@ public class PlaceNotificationSettingsFragment extends BaseFragment implements O
 	        TextView placeName = (TextView) vi.findViewById(R.id.place_name_notification);
 	        placeName.setText(p.getName());
 	        TextView defaultSetting = (TextView) vi.findViewById(R.id.notification_default_setting);
-	        defaultSetting.setText(context.getResources().getString(R.string.default_settings) + ": " +
-	        		Boolean.toString(p.isSuggestUnlock()));
+	        String defaultSettingText;
+	        if(p.isSuggestUnlock()){
+	        	defaultSettingText = context.getResources().getString(R.string.on);
+	        }
+	        else {
+	        	defaultSettingText = context.getResources().getString(R.string.off);
+	        }
+	        defaultSetting.setText(context.getResources().getString(R.string.default_settings) + ": " + defaultSettingText);
 	        Switch placeSwitch = (Switch) vi.findViewById(R.id.place_switch_notification);
 	        placeSwitch.setChecked(p.getNotificationEnabled());
 	        placeSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {

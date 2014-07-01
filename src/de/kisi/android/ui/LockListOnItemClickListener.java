@@ -67,26 +67,17 @@ public class LockListOnItemClickListener implements OnItemClickListener {
 			public void onUnlockSuccess(String message) {
 				progressDialog.dismiss();
 				Toast.makeText(KisiApplication.getInstance(), message, Toast.LENGTH_SHORT).show();
-				//final Button currentButton = (Button) parent.getChildAt(position);
 				final Button currentButton = (Button) view;
 				parent.invalidate();
-				// save button design
-				//final Drawable currentBackground = currentButton.getBackground();
-				final String currentText = (String) currentButton.getText();
-
-				// change to unlocked design
-				currentButton.setText("");
-				currentButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.kisi_lock_open2, 0, 0, 0);
-				currentButton.setBackgroundColor(Color.GREEN);
+				currentButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.kisi_lock_open, 0, 0, 0);
+				currentButton.setBackgroundColor(Color.parseColor("#99CC00"));
 				Handler handler = new Handler();
 				handler.postDelayed(new Runnable() {
 					public void run() {
 
 						// after delay back to old design re-enable click
-						//currentButton.setBackgroundDrawable(currentBackground);
 						currentButton.setBackgroundColor(KisiApplication.getInstance().getResources().getColor(R.color.kisi_color));
 						currentButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.kisi_lock, 0, 0, 0);
-						currentButton.setText(currentText);
 
 					}
 				}, delay);	
@@ -96,15 +87,10 @@ public class LockListOnItemClickListener implements OnItemClickListener {
 			public void onUnlockFail(String alertMsg) {
 				progressDialog.dismiss();
 				Toast.makeText(KisiApplication.getInstance(), alertMsg, Toast.LENGTH_SHORT).show();
-//				Log.d("LockListOnItemClickListener" , view.toString() + "  " + ((Button) view).getText());
-//				Log.d("LockListOnItemClickListener" , parent.getChildAt(position).toString() + "  " + ((Button)parent.getChildAt(position)).getText());
 				Button button = (Button)view ;
 				final Button currentButton = button;
 				parent.invalidate();
-
-//						(Button) parent.getChildAt(position);
 				// save button design
-				//final Drawable currentBackground = currentButton.getBackground();
 				final String currentText = (String) currentButton.getText();
 				// change to failure design
 				currentButton.setBackgroundColor(Color.RED);
@@ -115,7 +101,6 @@ public class LockListOnItemClickListener implements OnItemClickListener {
 					public void run() {
 
 						// after delay back to old design re-enable click
-//						currentButton.setBackgroundDrawable(currentBackground);
 						currentButton.setBackgroundColor(KisiApplication.getInstance().getResources().getColor(R.color.kisi_color));
 						currentButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.kisi_lock, 0, 0, 0);
 						currentButton.setText(currentText);

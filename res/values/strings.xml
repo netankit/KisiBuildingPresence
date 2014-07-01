@@ -88,4 +88,6 @@
 	<string name="settings">SETTINGS</string>
 	<string name="account">ACCOUNT</string>
 	<string name="default_settings">default</string>
+	<string name="on">on</string>
+	<string name="off">off</string>
 </resources>
