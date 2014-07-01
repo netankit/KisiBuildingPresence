@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 
 
+
 import android.content.Intent;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import de.kisi.android.account.KisiAccountManager;
 import de.kisi.android.api.calls.CreateGatewayCall;
 import de.kisi.android.api.calls.CreateNewKeyCall;
 import de.kisi.android.api.calls.GenericCall;
+import de.kisi.android.api.calls.GetLogs;
 import de.kisi.android.api.calls.LoginCall;
 import de.kisi.android.api.calls.LogoutCall;
 import de.kisi.android.api.calls.RegisterCall;
@@ -186,6 +188,11 @@ public class KisiAPI {
 		new UnlockCall(lock, callback, trigger, automatic_unlock).send();
 	}
 	
+	public void getLogs(Place place, final LogsCallback callback) {
+		new GetLogs(place, callback).send();
+	}
+	
+	
 	// Registration: Registers user by sending in a JSON object with user information.
 	public void register(
 			String first_name, 
@@ -266,36 +273,5 @@ public class KisiAPI {
 		DataManager.getInstance().deletePlaceLockLocatorFromDB();
 		this.updatePlaces(listener);
 	}
-
-	public void getLogs(Place place, final LogsCallback callback) {
-		KisiRestClient.getInstance().get("places/" + place.getId() + "/events", new JsonHttpResponseHandler() {
-			
-			public void onSuccess(JSONArray jsonArray) {
-				List<Event> events = new LinkedList<Event>();
-				GsonBuilder gb = new GsonBuilder();
-				gb.registerTypeAdapter(Date.class, new DateDeserializer());
-				Gson gson = gb.create();
-				for(int i = 0; i < jsonArray.length(); i++) {
-					Event event = null;
-					try {
-						event = gson.fromJson(jsonArray.getJSONObject(i).toString(), Event.class);
-					} catch (JsonSyntaxException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					events.add(event);
-				}
-				callback.onLogsResult(events);
-			}
-
-			public void onFailure(java.lang.Throwable e, org.json.JSONArray errorResponse) {
-				callback.onLogsResult(null);
-			}
-		});
-	}
-	
 
 }
