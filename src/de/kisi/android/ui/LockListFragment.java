@@ -65,6 +65,7 @@ public class LockListFragment extends BaseFragment{
 			//TODO: review this code: +2 caused an indexOutOfBoundsException so i removed it
 			mLockList.performItemClick(mLockList.getAdapter().getView(mActivePosition, null, null), mActivePosition,
 					mLockList.getAdapter().getItemId(mActivePosition));
+			mLockList.setSelection(mActivePosition);
 		}else{
 			unlockInProgress = true;
 			this.lockId = lockId;
@@ -76,8 +77,9 @@ public class LockListFragment extends BaseFragment{
 		if(viewCreated){
 			mLockList.invalidate();
 			mLockListAdapter.addSuggestedNFC(lockId);
-			Button button = (Button)mLockList.getAdapter().getView(mLockListAdapter.getItemPosition(lockId), null, null);
-			button.setBackgroundColor(Color.BLACK);
+			int position = mLockListAdapter.getItemPosition(lockId);
+			mLockListAdapter.getView(position, null, null);
+			mLockList.setSelection(position);
 		}else{
 			highlightInProgress = true;
 			this.lockId = lockId;
