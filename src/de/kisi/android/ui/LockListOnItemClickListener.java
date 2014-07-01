@@ -40,7 +40,8 @@ public class LockListOnItemClickListener implements OnItemClickListener {
 		
 		LockListAdapter adapter = (LockListAdapter)parent.getAdapter();
 		String trigger = adapter.getTrigger(); 
-		//TODO: implement this!!!
+
+
 		String buttonTrigger = "manual";
 		boolean automatic = false;
 		if("NFC".equals(trigger)){

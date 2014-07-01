@@ -56,13 +56,13 @@ public class LockListFragment extends BaseFragment{
 
 	public void performItemClick(int lockId, String sender){
 		if(viewCreated){
-		int mActivePosition = mLockListAdapter.getItemPosition(lockId);
-		mLockListAdapter.setTrigger(sender);
-		mLockList.invalidate();
-		// + 2 cause there are 2 elements before the places start in the ListView (TextView and the divider)
-		//TODO: review this code: +2 caused an indexOutOfBoundsException so i removed it
-		mLockList.performItemClick(mLockList.getAdapter().getView(mActivePosition, null, null), mActivePosition,
-				mLockList.getAdapter().getItemId(mActivePosition));
+			int mActivePosition = mLockListAdapter.getItemPosition(lockId);
+			mLockListAdapter.setTrigger(sender);
+			mLockList.invalidate();
+			// + 2 cause there are 2 elements before the places start in the ListView (TextView and the divider)
+			//TODO: review this code: +2 caused an indexOutOfBoundsException so i removed it
+			mLockList.performItemClick(mLockList.getAdapter().getView(mActivePosition, null, null), mActivePosition,
+					mLockList.getAdapter().getItemId(mActivePosition));
 		}else{
 			unlockInProgress = true;
 			this.lockId = lockId;

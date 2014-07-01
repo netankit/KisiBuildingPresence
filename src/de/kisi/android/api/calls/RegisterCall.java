@@ -28,7 +28,7 @@ public class RegisterCall extends GenericCall {
 			Boolean terms_and_conditions,  
 			final RegisterCallback callback) {
 		
-		super("users", HTTPMethod.POST);
+		super("users", HTTPMethod.POST_NO_AUTH);
 		
 		this.first_name = first_name;
 		this.last_name = last_name;

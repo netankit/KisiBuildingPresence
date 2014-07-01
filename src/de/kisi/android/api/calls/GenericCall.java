@@ -134,6 +134,9 @@ public abstract class GenericCall {
 		case DELETE:
 			KisiRestClient.getInstance().delete(path,  realHandler);
 			break;
+		case POST_NO_AUTH:
+			KisiRestClient.getInstance().postNoAuth(path, json, realHandler);
+			break;
 		default:
 			throw new RuntimeException("Unsupported HttpMethod");
 		}

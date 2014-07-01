@@ -24,7 +24,7 @@ public class LoginCall extends GenericCall {
 	private String password;
 	
 	public LoginCall(String email, String password, final LoginCallback callback) {
-		super("users/sign_in", HTTPMethod.POST);
+		super("users/sign_in", HTTPMethod.POST_NO_AUTH);
 
 		this.email = email;
 		this.password = password;
