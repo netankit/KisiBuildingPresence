@@ -267,13 +267,13 @@ public class BaseActivity extends FragmentActivity implements VersionCheckCallba
 				String newstVersion[] = result.split("\\.");
 				for(int i = 0; i < versionName.length; i++) {
 					//version in stats is older the current version 
-//					if(Integer.valueOf(versionName[i]) > Integer.valueOf(newstVersion[i]) ){
-//						break;
-//					}
-//					
-//					if(Integer.valueOf(versionName[i]) < Integer.valueOf(newstVersion[i]) ){
+					if(Integer.valueOf(versionName[i]) > Integer.valueOf(newstVersion[i]) ){
+						break;
+					}
+					
+					if(Integer.valueOf(versionName[i]) < Integer.valueOf(newstVersion[i]) ){
 						updateButton();
-//					}
+					}
 				}
 			}
 		}
