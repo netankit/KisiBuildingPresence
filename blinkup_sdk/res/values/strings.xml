@@ -26,6 +26,7 @@
     </string>
     <string name="__bu_password">Password</string>
     <string name="__bu_remember_password">Remember Password</string>
+    <string name="__bu_show_password">Show Password</string>
     <string name="__bu_send_blinkup">Send BlinkUp</string>
     <string name="__bu_ssid">WiFi network name</string>
     <string name="__bu_wps_pin">WPS PIN (Optional)</string>

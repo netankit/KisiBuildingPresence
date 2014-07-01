@@ -1,7 +1,6 @@
 package de.kisi.android.ui;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;

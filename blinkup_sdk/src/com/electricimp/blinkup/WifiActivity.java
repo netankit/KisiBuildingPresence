@@ -10,10 +10,16 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -27,11 +33,33 @@ public class WifiActivity extends PreBlinkUpActivity {
     private EditText ssidView;
     private EditText passwordView;
     private CheckBox rememberCheckBox;
+    private CheckBox showCheckBox;
 
     private TextWatcher ssidWatcher = new TextWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
             blinkupButton.setEnabled(s.length() > 0);
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                int after) {
+            // Not used
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before,
+                int count) {
+            // Not used
+        }
+    };
+
+    private TextWatcher passwordWatcher = new TextWatcher() {
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (s.length() == 0) {
+                showCheckBox.setEnabled(true);
+            }
         }
 
         @Override
@@ -73,9 +101,41 @@ public class WifiActivity extends PreBlinkUpActivity {
                 blinkup.stringIdRememberPassword,
                 R.string.__bu_remember_password);
 
-        passwordView.setTypeface(Typeface.DEFAULT);
+        showCheckBox = (CheckBox) findViewById(R.id.__bu_show_password);
+        BlinkupController.setText(showCheckBox,
+                blinkup.stringIdShowPassword,
+                R.string.__bu_show_password);
+        showCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,
+                    boolean isChecked) {
+                // Save cursor position
+                int start = passwordView.getSelectionStart();
+                int end = passwordView.getSelectionEnd();
+
+                if (isChecked) {
+                    passwordView.setInputType(InputType.TYPE_CLASS_TEXT |
+                            InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                } else {
+                    passwordView.setInputType(InputType.TYPE_CLASS_TEXT |
+                            InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    passwordView.setTransformationMethod(
+                            PasswordTransformationMethod.getInstance());
+                }
+
+                // Restore cursor position
+                passwordView.setSelection(start, end);
+
+                passwordView.setTypeface(Typeface.DEFAULT);
+            }
+        });
+        showCheckBox.setVisibility(blinkup.showPassword ?
+                View.VISIBLE : View.GONE);
+
         blinkupButton.setEnabled(false);
         ssidView.addTextChangedListener(ssidWatcher);
+        passwordView.setTypeface(Typeface.DEFAULT);
+        passwordView.addTextChangedListener(passwordWatcher);
 
         TextView blinkupDesc = (TextView) findViewById(R.id.__bu_blinkup_desc);
         BlinkupController.setText(blinkupDesc, blinkup.stringIdBlinkUpDesc,
@@ -95,7 +155,7 @@ public class WifiActivity extends PreBlinkUpActivity {
 
         String encrypted_pwd = sharedPreferences.getString(
                 WifiSelectActivity.SAVED_PASSWORD_PREFIX + ssid, "");
-        if (encrypted_pwd == null) {
+        if (TextUtils.isEmpty(encrypted_pwd)) {
             if (ssid != null) {
                 passwordView.requestFocus();
             }
@@ -105,6 +165,7 @@ public class WifiActivity extends PreBlinkUpActivity {
             getWindow().setSoftInputMode(
                       WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
+        showCheckBox.setEnabled(TextUtils.isEmpty(passwordView.getText()));
     }
 
     @Override

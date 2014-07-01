@@ -1,14 +1,11 @@
 package de.kisi.android.ui;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -18,7 +15,6 @@ import de.kisi.android.R;
 import de.kisi.android.api.KisiAPI;
 import de.kisi.android.api.LogsCallback;
 import de.kisi.android.model.Event;
-import de.kisi.android.model.Place;
 
 public class LogInfoFragment extends BaseFragment implements LogsCallback{
 

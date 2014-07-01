@@ -1,8 +1,7 @@
 package de.kisi.android.ui;
 
-import de.kisi.android.model.Place;
 import android.app.Fragment;
-import android.util.Log;
+import de.kisi.android.model.Place;
 
 public abstract class BaseFragment extends Fragment{
 
