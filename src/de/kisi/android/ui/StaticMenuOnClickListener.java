@@ -30,6 +30,7 @@ public class StaticMenuOnClickListener implements OnClickListener {
 		switch(v.getId()) {
 			case R.id.refreshButton:
 				KisiAPI.getInstance().refresh(activity);
+				activity.resetDrawerPosition();
 			return;
 		
 

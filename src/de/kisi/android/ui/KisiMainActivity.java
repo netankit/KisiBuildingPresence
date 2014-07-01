@@ -154,7 +154,17 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 		closeDrawer();
 
 	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		resetDrawerPosition();
+	}
 
+	public void resetDrawerPosition(){
+		mDrawerList.setSelection(0);
+	}
+	
 	protected void closeDrawer(){
 		mDrawerLayout.closeDrawer(mDrawerList);
 	}
