@@ -55,6 +55,9 @@ public class Place {
 //	private Date updatedAt;
 
 	
+	@SerializedName("locator_id")
+	private int defaultLocatorID;
+	
 	public Place () {}
 	
 	
@@ -207,5 +210,9 @@ public class Place {
 	public String toString(){
 		return "Place: "+getId();
 	}
-	
+
+
+	public int getDefaultLocatorID() {
+		return defaultLocatorID;
+	}
 }
