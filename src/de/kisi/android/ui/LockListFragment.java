@@ -2,10 +2,12 @@ package de.kisi.android.ui;
 
 import de.kisi.android.R;
 import de.kisi.android.api.KisiAPI;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 public class LockListFragment extends BaseFragment{
@@ -72,8 +74,10 @@ public class LockListFragment extends BaseFragment{
 	}
 	public void highlightButton(int lockId){
 		if(viewCreated){
-			mLockListAdapter.addSuggestedNFC(lockId);
 			mLockList.invalidate();
+			mLockListAdapter.addSuggestedNFC(lockId);
+			Button button = (Button)mLockList.getAdapter().getView(mLockListAdapter.getItemPosition(lockId), null, null);
+			button.setBackgroundColor(Color.BLACK);
 		}else{
 			highlightInProgress = true;
 			this.lockId = lockId;

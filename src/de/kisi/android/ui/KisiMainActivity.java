@@ -228,10 +228,12 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 		if(place != null) {
 			// - 2 cause there are 2 elements before the places start in the ListView (TextView and the divider)
 			selectItem(selectedPosition + 2 , mDrawerListAdapter.getItemId(selectedPosition));
-        	if (place != null){
+			String newTitle;
+			newTitle = fragmentStack.peek().getName();
+        	/*if (place != null){
         		String newTitle = place.getName();
-        		title.setText(newTitle);
-        	}
+        	}*/
+    		title.setText(newTitle);
 		}
 		else {
 			KisiAPI.getInstance().updatePlaces(this);

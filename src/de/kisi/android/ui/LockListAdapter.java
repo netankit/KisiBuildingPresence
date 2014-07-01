@@ -1,10 +1,13 @@
 package de.kisi.android.ui;
 
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map.Entry;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +24,13 @@ public class LockListAdapter extends BaseAdapter {
 	private Place place;
 	private String trigger;
 	private HashSet<Integer> suggestedNFC;
+	private Hashtable<Integer, Button> cachedButtons;  
 
 	public LockListAdapter(Context context, Place place) {
 		this.mContext = context;
 		this.place = place;
 		suggestedNFC = new HashSet<Integer>();
+		cachedButtons = new Hashtable<Integer,Button>();
 	}
 	
 	@Override
@@ -99,19 +104,34 @@ public class LockListAdapter extends BaseAdapter {
 		Lock lock = place.getLocks().get(position);
 		Button button;
 		if(convertView == null) {
+			if(cachedButtons.containsKey(position)){
+				button = cachedButtons.get(position);
+			}else{
 				LayoutInflater li = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				button = (Button) li.inflate(R.layout.lock_button, parent, false);
+				cachedButtons.put(position, button);
+			}
 		}
 		else {
+			if(cachedButtons.containsValue(convertView)){
+				Integer delPos = -1;
+				for(Entry<Integer,Button> entry : cachedButtons.entrySet()){
+					if(entry.getValue().equals(convertView))
+						delPos=entry.getKey();
+				}
+				cachedButtons.remove(delPos);
+			}
 			button = (Button) convertView;
+			cachedButtons.put(position, button);
 		}
+		Log.i("Cache","size: "+cachedButtons.size());
 		button.setText(lock.getName());
 		
-		if(suggestedNFC.contains(lock.getId()))
+		if(suggestedNFC.contains(lock.getId())){
 			button.setBackgroundColor(Color.BLACK);
-		else
+		}else{
 			button.setBackgroundColor(mContext.getResources().getColor(R.color.kisi_color));
-
+		}
 		//disable the clickability of the buttons so that the OnItemClickListner of the ListView handels the clicks 
 		button.setFocusable(false);
 		button.setClickable(false);
