@@ -1,6 +1,7 @@
 package de.kisi.android.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.content.Context;
@@ -54,7 +55,7 @@ public class Place {
 //	@SerializedName("updated_at")
 //	private Date updatedAt;
 
-	
+	@DatabaseField
 	@SerializedName("locator_id")
 	private int defaultLocatorID;
 	
@@ -90,21 +91,35 @@ public class Place {
 	}
 
 	public List<Locator> getLocators() {
-		Locator[] locatorArray = locators.toArray(new Locator[0]);
-		List<Locator> result = new ArrayList<Locator>();
-		for(Locator l: locatorArray) {
-			result.add(l);
+		KisiAPI.getInstance().updateLocators(this);
+		List<Locator> result = Arrays.asList(locators.toArray(new Locator[0]));
+		if (result.size() == 0) { 
+			Locator[] locatorArray = locators.toArray(new Locator[0]);
+			result = new ArrayList<Locator>();
+			for(Locator l: locatorArray) {
+				result.add(l);
+			}
 		}
 		return result;
 	}
 	
-	
+	public Locator getDefaultLocator() {
+		List<Locator> locatorsList = getLocators();
+		for (Locator locator : locatorsList) {
+			if (locator.getId() == defaultLocatorID) {
+				return locator;
+			}
+		}
+		return null;
+	}
 
 	public double getLatitude() {
+//		return getDefaultLocator().getLatitude();
 		return latitude;
 	}
 
 	public double getLongitude() {
+//		return getDefaultLocator().getLongitude();
 		return longitude;
 	}
 

@@ -26,7 +26,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	// name of the database file for your application -- change to something appropriate for your app
 	private static final String DATABASE_NAME = "Kisi.db";
 	// any time you make changes to your database objects, you may have to increase the database version
-	private static final int DATABASE_VERSION = 4;
+	private static final int DATABASE_VERSION = 5;
 
 	// the DAO object we use to access the Lock table;
 
@@ -85,6 +85,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			if(oldVersion < 4) {
 				getPlaceDao();
 				placeDao.executeRaw("ALTER TABLE 'place' ADD COLUMN suggestUnlock BOOLEAN;");
+			}
+			if(oldVersion < 5) {
+				getPlaceDao();
+				placeDao.executeRaw("ALTER TABLE 'place' ADD COLUMN defaultLocatorID INT;");
 			}
 			
 		} catch (SQLException e) {
