@@ -15,6 +15,8 @@ import org.json.JSONObject;
 
 
 
+
+
 import android.content.Intent;
 import android.widget.Toast;
 
@@ -30,6 +32,7 @@ import de.kisi.android.api.calls.CreateGatewayCall;
 import de.kisi.android.api.calls.CreateNewKeyCall;
 import de.kisi.android.api.calls.GenericCall;
 import de.kisi.android.api.calls.GetLogs;
+import de.kisi.android.api.calls.LocatorBoundaryCrossingCall;
 import de.kisi.android.api.calls.LoginCall;
 import de.kisi.android.api.calls.LogoutCall;
 import de.kisi.android.api.calls.RegisterCall;
@@ -38,8 +41,10 @@ import de.kisi.android.api.calls.UpdateLocatorsCall;
 import de.kisi.android.api.calls.UpdateLocksCall;
 import de.kisi.android.api.calls.UpdatePlacesCall;
 import de.kisi.android.api.calls.VersionCheckCall;
+import de.kisi.android.api.calls.LocatorBoundaryCrossingCall.BoundaryCrossing;
 import de.kisi.android.db.DataManager;
 import de.kisi.android.model.Event;
+import de.kisi.android.model.Locator;
 import de.kisi.android.model.Lock;
 import de.kisi.android.model.Place;
 import de.kisi.android.model.User;
@@ -186,6 +191,10 @@ public class KisiAPI {
 	 */
 	public void unlock(Lock lock, final UnlockCallback callback, String trigger, boolean automatic_unlock){
 		new UnlockCall(lock, callback, trigger, automatic_unlock).send();
+	}
+	
+	public void crossBoundary(Locator locator, BoundaryCrossing action){
+		this.sendCall(new LocatorBoundaryCrossingCall(locator, action));
 	}
 	
 	public void getLogs(Place place, final LogsCallback callback) {

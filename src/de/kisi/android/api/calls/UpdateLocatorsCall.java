@@ -7,6 +7,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import de.kisi.android.api.KisiAPI;
 import de.kisi.android.api.OnPlaceChangedEventHandler;
+import de.kisi.android.api.calls.LocatorBoundaryCrossingCall.BoundaryCrossing;
 import de.kisi.android.db.DataManager;
 import de.kisi.android.model.Locator;
 import de.kisi.android.model.Place;
