@@ -35,6 +35,7 @@
 
     <!-- Wifi Manager -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
 
     <application
         android:name="de.kisi.android.KisiApplication"

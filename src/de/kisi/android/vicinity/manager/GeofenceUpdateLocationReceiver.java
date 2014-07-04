@@ -11,6 +11,7 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
 
 import de.kisi.android.api.KisiAPI;
+import de.kisi.android.api.calls.LocatorBoundaryCrossingCall.BoundaryCrossing;
 import de.kisi.android.model.Locator;
 import de.kisi.android.model.Place;
 import de.kisi.android.vicinity.LockInVicinityActorFactory;
@@ -44,6 +45,12 @@ public class GeofenceUpdateLocationReceiver extends BroadcastReceiver{
             		locator.setType("geofence");
             		locator.setPlaceId(placeID);
             		actor.actOnEntry(locator);
+            		Place placeToCross = KisiAPI.getInstance().getPlaceById(placeID);
+            		KisiAPI.getInstance().updateLocators(placeToCross);
+            		Locator defaultLocator = placeToCross.getDefaultLocator();
+            		if (defaultLocator.isNotifyOnEntry()) {
+            			KisiAPI.getInstance().crossBoundary(defaultLocator, BoundaryCrossing.ENTER);
+            		}
             	}
             }
         else if(transitionType == Geofence.GEOFENCE_TRANSITION_EXIT)
@@ -54,6 +61,11 @@ public class GeofenceUpdateLocationReceiver extends BroadcastReceiver{
         		locator.setType("geofence");
         		locator.setPlaceId(placeID);
             	actor.actOnExit(locator);
+            	Place placeToCross = KisiAPI.getInstance().getPlaceById(placeID);
+        		Locator defaultLocator = placeToCross.getDefaultLocator();
+            	if (defaultLocator.isNotifyOnExit()) {
+        			KisiAPI.getInstance().crossBoundary(defaultLocator, BoundaryCrossing.EXIT);
+        		}
             }
 	}
 	

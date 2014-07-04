@@ -20,8 +20,11 @@ public class UpdateLocatorsCall extends GenericCall {
 		handler = new JsonHttpResponseHandler() {
 			
 			public void onSuccess(JSONArray response) {
+				String responseString = response.toString();
+				responseString = responseString.replaceAll("\"notify_on_entry\":null", "\"notify_on_entry\":true");
+				responseString = responseString.replaceAll("\"notify_on_exit\":null", "\"notify_on_exit\":true");
 				Gson gson = new Gson();
-				Locator[] locators = gson.fromJson(response.toString(), Locator[].class);
+				Locator[] locators = gson.fromJson(responseString, Locator[].class);
 				try {// Prevent App from crashing when closing during a
 						// refresh
 					for (Locator l : locators) {

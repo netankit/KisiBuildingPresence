@@ -10,6 +10,7 @@ import android.os.Parcelable;
 import de.kisi.android.KisiApplication;
 import de.kisi.android.account.AccountActivity;
 import de.kisi.android.api.KisiAPI;
+import de.kisi.android.api.calls.LocatorBoundaryCrossingCall.BoundaryCrossing;
 import de.kisi.android.model.Locator;
 import de.kisi.android.model.Place;
 import de.kisi.android.ui.KisiMainActivity;
@@ -48,6 +49,14 @@ public class NFCReceiver extends Activity{
 	        			LockInVicinityActorInterface actor = LockInVicinityActorFactory.getActor(locator);
 	        			// act
 	        			actor.actOnEntry(locator);
+	            		KisiAPI.getInstance().updateLocators(place);
+	            		Locator defaultLocator = place.getDefaultLocator();
+	            		if (defaultLocator.isNotifyOnEntry()) {
+	            			KisiAPI.getInstance().crossBoundary(defaultLocator, BoundaryCrossing.ENTER);
+	            		}
+	            		if (defaultLocator.isNotifyOnExit()) {
+		        			KisiAPI.getInstance().crossBoundary(defaultLocator, BoundaryCrossing.EXIT);
+		        		}
 	        			foundLock = true;
 	        		}
 	        	}

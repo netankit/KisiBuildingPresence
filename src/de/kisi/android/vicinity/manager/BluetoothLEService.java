@@ -22,6 +22,7 @@ import com.radiusnetworks.ibeacon.Region;
 import de.kisi.android.api.KisiAPI;
 import de.kisi.android.api.OnPlaceChangedEventHandler;
 import de.kisi.android.api.OnPlaceChangedListener;
+import de.kisi.android.api.calls.LocatorBoundaryCrossingCall.BoundaryCrossing;
 import de.kisi.android.model.Locator;
 import de.kisi.android.model.Place;
 import de.kisi.android.notifications.NotificationInformation;
@@ -192,10 +193,21 @@ public class BluetoothLEService extends IntentService implements IBeaconConsumer
 					if(unlockLocatorId.contains(locatorId) && locator.getSuggestUnlockTreshold()<maxRssi){
 						unlockLocatorId.remove(locatorId);
 						actor.actOnExit(locator);
+						Place placeToCross = KisiAPI.getInstance().getPlaceById(placeId);
+		        		Locator defaultLocator = placeToCross.getDefaultLocator();
+		            	if (defaultLocator.isNotifyOnExit()) {
+		        			KisiAPI.getInstance().crossBoundary(defaultLocator, BoundaryCrossing.EXIT);
+		        		}
 					}
 					if(!unlockLocatorId.contains(locatorId) && locator.getSuggestUnlockTreshold()>maxRssi){
 						unlockLocatorId.add(locatorId);
 						actor.actOnEntry(locator);
+						Place placeToCross = KisiAPI.getInstance().getPlaceById(placeId);
+	            		KisiAPI.getInstance().updateLocators(placeToCross);
+	            		Locator defaultLocator = placeToCross.getDefaultLocator();
+	            		if (defaultLocator.isNotifyOnEntry()) {
+	            			KisiAPI.getInstance().crossBoundary(defaultLocator, BoundaryCrossing.ENTER);
+	            		}
 					}
 				}catch(NullPointerException e){
 					// Do nothing if there is no such locator

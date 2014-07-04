@@ -63,6 +63,14 @@ public class Locator {
 	
 	@DatabaseField
 	private String type;
+	
+	@DatabaseField
+	@SerializedName("notify_on_entry")
+	private boolean notifyOnEntry;
+	
+	@DatabaseField
+	@SerializedName("notify_on_exit")
+	private boolean notifyOnExit;
 
 	
 	
@@ -209,7 +217,21 @@ public class Locator {
 	public void setType(String type) {
 		this.type = type;
 	}
+
+	public boolean isNotifyOnEntry() {
+		return notifyOnEntry;
+	}
 	
+	public void setNotifyOnEntry(boolean notifyOnEntry) {
+		this.notifyOnEntry = notifyOnEntry;
+	}
+
+	public boolean isNotifyOnExit() {
+		return notifyOnExit;
+	}
 	
+	public void setNotifyOnExit(boolean notifyOnExit) {
+		this.notifyOnExit = notifyOnExit;
+	}
 
 }

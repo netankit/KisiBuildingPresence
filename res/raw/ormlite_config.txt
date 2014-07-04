@@ -13,6 +13,12 @@ id=true
 fieldName=placeId
 # --field-end--
 # --field-start--
+fieldName=notifyOnEntry
+# --field-end--
+# --field-start--
+fieldName=notifyOnExit
+# --field-end--
+# --field-start--
 fieldName=place
 foreign=true
 foreignAutoRefresh=true
@@ -111,6 +117,9 @@ fieldName=name
 # --field-start--
 fieldName=locks
 foreignCollection=true
+# --field-end--
+# --field-start--
+fieldName=defaultLocatorID
 # --field-end--
 # --field-start--
 fieldName=latitude

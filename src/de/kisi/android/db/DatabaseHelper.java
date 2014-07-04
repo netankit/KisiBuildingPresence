@@ -81,7 +81,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			if (oldVersion < 3) {
 				TableUtils.createTable(connectionSource, Locator.class);
 			}
-			//Added in verion 4 the column suggestUnlock in the place table
+			//Added in version 4 the column suggestUnlock in the place table
 			if(oldVersion < 4) {
 				getPlaceDao();
 				placeDao.executeRaw("ALTER TABLE 'place' ADD COLUMN suggestUnlock BOOLEAN;");
@@ -89,6 +89,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			if(oldVersion < 5) {
 				getPlaceDao();
 				placeDao.executeRaw("ALTER TABLE 'place' ADD COLUMN defaultLocatorID INT;");
+				getLocatorDao();
+				locatorDao.executeRaw("ALTER TABLE 'locator' ADD COLUMN notifyOnEntry BOOLEAN;");
+				getLocatorDao();
+				locatorDao.executeRaw("ALTER TABLE 'locator' ADD COLUMN notifyOnExit BOOLEAN;");
 			}
 			
 		} catch (SQLException e) {
