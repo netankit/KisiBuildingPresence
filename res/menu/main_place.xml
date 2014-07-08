@@ -13,6 +13,10 @@
    		     android:title="@string/log"
    		     android:showAsAction="never"
    		/>
+   		<item android:id="@+id/showSharedKeys"
+   		     android:title="@string/sharedKeyList"
+   		     android:showAsAction="never"
+   		/>
 
 
 </menu>

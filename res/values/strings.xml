@@ -19,6 +19,7 @@
     <string name="refresh">Refresh</string>
     <string name="share">Share this place</string>
     <string name="log">Get log information</string>
+    <string name="sharedKeyList">Get Shared Keys Info.</string>
     <string name="logout">Logout</string>
     <string name="setup">Setup KISI device</string>
     <string name="pressto">Press to secure unlock</string>

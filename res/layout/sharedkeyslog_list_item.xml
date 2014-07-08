@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:id="@+id/log_linearlayout"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:orientation="vertical"
+     android:paddingBottom="8dip" 
+     android:paddingTop="8dip" 
+     android:paddingRight="15dip" 
+     android:paddingLeft="15dip" >
+	
+ <TextView
+     android:id="@+id/userEmail"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:textSize="16sp"/>
+
+ <TextView
+     android:id="@+id/sharedLockName"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:textColor="#FF909090"/>
+
+ </LinearLayout>

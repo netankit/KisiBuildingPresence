@@ -35,29 +35,27 @@ import de.kisi.android.api.KisiAPI;
 import de.kisi.android.api.OnPlaceChangedListener;
 import de.kisi.android.model.Place;
 
-public class KisiMainActivity extends BaseActivity implements OnPlaceChangedListener{
+public class KisiMainActivity extends BaseActivity implements
+		OnPlaceChangedListener {
 
 	public static final String IMP_API_KEY = "08a6dd6db0cd365513df881568c47a1c";
 	public static final String NEW_RELIC_API_KEY = "AAe80044cf73854b68f6e83881c9e61c0df9d92e56";
-
-
 
 	private Stack<BaseFragment> fragmentStack = new Stack<BaseFragment>();
 	private boolean fragmentStackInvalid = false;
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private DrawerListAdapter mDrawerListAdapter;
-	//private ListView mLockList;
-	//private LockListAdapter mLockListAdapter; 
+	// private ListView mLockList;
+	// private LockListAdapter mLockListAdapter;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private int selectedPosition = 0;
-	
+
 	private TextView settingsView;
-	
-	private MergeAdapter  mMergeAdapter;
+
+	private MergeAdapter mMergeAdapter;
 
 	private Place mPlace = null;
-
 
 	private TextView accountName;
 	private TextView title;
@@ -66,17 +64,17 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 	// TODO: change this later
 	public static int LOGIN_REQUEST_CODE = 5;
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		NewRelic.withApplicationToken(NEW_RELIC_API_KEY).start(this.getApplication());
+		NewRelic.withApplicationToken(NEW_RELIC_API_KEY).start(
+				this.getApplication());
 
 		setContentView(R.layout.navigation_drawer_layout);
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
-		//mLockList = (ListView) findViewById(R.id.lock_list);
+		// mLockList = (ListView) findViewById(R.id.lock_list);
 		mDrawerList.setFocusableInTouchMode(false);
 		mMergeAdapter = new MergeAdapter();
 		mDrawerListAdapter = new DrawerListAdapter(this);
@@ -90,43 +88,48 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 		mDrawerList.setAdapter(mMergeAdapter);
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 		getActionBar().setCustomView(R.layout.abs_layout);
-		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_USE_LOGO | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);		
-		
-		title = (TextView) getActionBar().getCustomView().findViewById(R.id.actionbar_title);
-		
-		
-		mDrawerToggle = new ActionBarDrawerToggle( this,  mDrawerLayout, R.drawable.ic_drawer,  R.string.place_overview,  R.string.kisi ) {
+		getActionBar().setDisplayOptions(
+				ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_USE_LOGO
+						| ActionBar.DISPLAY_SHOW_HOME
+						| ActionBar.DISPLAY_HOME_AS_UP);
+
+		title = (TextView) getActionBar().getCustomView().findViewById(
+				R.id.actionbar_title);
+
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+				R.drawable.ic_drawer, R.string.place_overview, R.string.kisi) {
 			public void onDrawerClosed(View view) {
 				super.onDrawerClosed(view);
 				String newTitle = fragmentStack.peek().getName();
-				//getActionBar().setTitle(newTitle);
+				// getActionBar().setTitle(newTitle);
 				title.setText(newTitle);
-				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+				invalidateOptionsMenu(); // creates call to
+											// onPrepareOptionsMenu()
 			}
 
-	            public void onDrawerOpened(View drawerView) {
-	                super.onDrawerOpened(drawerView);
-	                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-	            }
-		 };
-		 
-		mDrawerLayout.setDrawerListener(mDrawerToggle);	 
+			public void onDrawerOpened(View drawerView) {
+				super.onDrawerOpened(drawerView);
+				invalidateOptionsMenu(); // creates call to
+											// onPrepareOptionsMenu()
+			}
+		};
 
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
 		AccountManager mAccountManager = AccountManager.get(this);
-		if(KisiAPI.getInstance().getUser()==null){
-			if(mAccountManager.getAccountsByType(KisiAuthenticator.ACCOUNT_TYPE).length==1){
-				Account account = mAccountManager.getAccountsByType(KisiAuthenticator.ACCOUNT_TYPE)[0];
+		if (KisiAPI.getInstance().getUser() == null) {
+			if (mAccountManager
+					.getAccountsByType(KisiAuthenticator.ACCOUNT_TYPE).length == 1) {
+				Account account = mAccountManager
+						.getAccountsByType(KisiAuthenticator.ACCOUNT_TYPE)[0];
 				mAccountManager.removeAccount(account, null, null);
 			}
 			Intent login = new Intent(this, AccountPickerActivity.class);
 			startActivityForResult(login, LOGIN_REQUEST_CODE);
-		}
-		else {
+		} else {
 			setUiIntoStartState();
 		}
 	}
-
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -137,11 +140,11 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 
 	@Override
 	public void onBackPressed() {
-		if(fragmentStack.size()<=1){
+		if (fragmentStack.size() <= 1) {
 			super.onBackPressed();
 			return;
 		}
-		if (fragmentStack.pop() instanceof LockListFragment){
+		if (fragmentStack.pop() instanceof LockListFragment) {
 			super.onBackPressed();
 			return;
 		}
@@ -149,138 +152,143 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 	}
 
 	@Override
-	public void onPause(){
+	public void onPause() {
 		super.onPause();
 		closeDrawer();
 
 	}
-	
+
 	@Override
-	public void onResume(){
+	public void onResume() {
 		super.onResume();
 		resetDrawerPosition();
 	}
 
-	public void resetDrawerPosition(){
+	public void resetDrawerPosition() {
 		mDrawerList.setSelection(0);
 	}
-	
-	protected void closeDrawer(){
+
+	protected void closeDrawer() {
 		mDrawerLayout.closeDrawer(mDrawerList);
 	}
 
-	protected void setFragment(BaseFragment fragment){
-		if (fragment == null){
+	protected void setFragment(BaseFragment fragment) {
+		if (fragment == null) {
 			return;
 		}
 
 		closeDrawer();
 
-		if (fragmentStackInvalid){
+		if (fragmentStackInvalid) {
 			fragmentStack.clear();
-		}else{
-			if (fragmentStack.size()>0){
+		} else {
+			if (fragmentStack.size() > 0) {
 				BaseFragment oldFragment = fragmentStack.peek();
-				if (oldFragment.getClass().equals(fragment.getClass())){
-					if( oldFragment.getPlace()== null && fragment.getPlace() == null){
+				if (oldFragment.getClass().equals(fragment.getClass())) {
+					if (oldFragment.getPlace() == null
+							&& fragment.getPlace() == null) {
 						return;
-					}else if (oldFragment.getPlace()!= null && fragment.getPlace() != null && oldFragment.getPlace().getId() == fragment.getPlace().getId()){
+					} else if (oldFragment.getPlace() != null
+							&& fragment.getPlace() != null
+							&& oldFragment.getPlace().getId() == fragment
+									.getPlace().getId()) {
 						return;
 					}
 				}
 			}
 		}
 
-		//getActionBar().setTitle(fragment.getName());
+		// getActionBar().setTitle(fragment.getName());
 		title.setText(fragment.getName());
 
 		FragmentManager fragmentManager = getFragmentManager();
 		fragmentStack.push(fragment);
-		fragmentManager.beginTransaction()
-		.replace(R.id.main_content, fragment)
-		.commit();
+		fragmentManager.beginTransaction().replace(R.id.main_content, fragment)
+				.commit();
 		invalidateOptionsMenu();
 	}
-
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		if(getIntent().hasExtra("Type")) {
+		if (getIntent().hasExtra("Type")) {
 			handleIntent(getIntent());
 			getIntent().removeExtra("Type");
 		}
 	}
 
-
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 
-		if(intent.hasExtra("Type")) {
+		if (intent.hasExtra("Type")) {
 			handleIntent(intent);
 			intent.removeExtra("Type");
 		}
 		invalidateOptionsMenu();
 	}
 
-	private class DrawerItemClickListener implements ListView.OnItemClickListener {
+	private class DrawerItemClickListener implements
+			ListView.OnItemClickListener {
 		@SuppressWarnings("rawtypes")
 		@Override
-		public void onItemClick(AdapterView parent, View view, int position, long id) {
+		public void onItemClick(AdapterView parent, View view, int position,
+				long id) {
 			selectItem(position, id);
 		}
 	}
 
 	private void setUiIntoStartState() {
 		Place place = KisiAPI.getInstance().getPlaceAt(0);
-		accountName.setText(KisiAPI.getInstance().getUser() == null ?  " " : KisiAPI.getInstance().getUser().getEmail() );
-		if(place != null) {
-			// - 2 cause there are 2 elements before the places start in the ListView (TextView and the divider)
-			selectItem(selectedPosition + 2 , mDrawerListAdapter.getItemId(selectedPosition));
+		accountName.setText(KisiAPI.getInstance().getUser() == null ? " "
+				: KisiAPI.getInstance().getUser().getEmail());
+		if (place != null) {
+			// - 2 cause there are 2 elements before the places start in the
+			// ListView (TextView and the divider)
+			selectItem(selectedPosition + 2,
+					mDrawerListAdapter.getItemId(selectedPosition));
 			String newTitle;
 			newTitle = fragmentStack.peek().getName();
-        	/*if (place != null){
-        		String newTitle = place.getName();
-        	}*/
-    		title.setText(newTitle);
-		}
-		else {
+			/*
+			 * if (place != null){ String newTitle = place.getName(); }
+			 */
+			title.setText(newTitle);
+		} else {
 			KisiAPI.getInstance().updatePlaces(this);
 		}
 	}
 
-
 	private LockListFragment selectItem(int position, long id) {
 		Place place = KisiAPI.getInstance().getPlaceById((int) id);
-		if(place != null) {
+		if (place != null) {
 			title.setText(place.getName());
-	    	mPlace = place;
+			mPlace = place;
 		}
-		// - 2 cause there are 2 elements before the places start in the ListView (TextView and the divider)
+		// - 2 cause there are 2 elements before the places start in the
+		// ListView (TextView and the divider)
 		selectedPosition = position - 2;
 		mDrawerListAdapter.selectItem(position - 2);
 		LockListFragment fragment = new LockListFragment();
 		fragment.setPlace(place);
 		mPlace = place;
 		setFragment(fragment);
-		
-		// Highlight the selected item, update the title, and close the drawer and check if the position is available 
-		// + 2 cause there are 2 elements before the places start in the ListView (TextView and the divider)
-		if( position < mDrawerListAdapter.getCount() + 2) {
+
+		// Highlight the selected item, update the title, and close the drawer
+		// and check if the position is available
+		// + 2 cause there are 2 elements before the places start in the
+		// ListView (TextView and the divider)
+		if (position < mDrawerListAdapter.getCount() + 2) {
 			mDrawerList.setItemChecked(position, true);
-		}
-		else {
+		} else {
 			mDrawerList.setItemChecked(2, true);
 		}
-		if(settingsView!=null){
+		if (settingsView != null) {
 			settingsView.setTextColor(Color.BLACK);
-			settingsView=null;
+			settingsView = null;
 		}
 		closeDrawer();
 		return (LockListFragment) fragmentStack.peek();
 	}
-
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -293,25 +301,27 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 		// get all places
 		Place[] places = KisiAPI.getInstance().getPlaces();
 		Place place;
-		if(item.getItemId() == R.id.share || item.getItemId() == R.id.share_actionbar_button) {
+		if (item.getItemId() == R.id.share
+				|| item.getItemId() == R.id.share_actionbar_button) {
 			// check if user has a place
 			if (places.length == 0) {
-				Toast.makeText(this, R.string.share_empty_place_error, Toast.LENGTH_LONG).show();
+				Toast.makeText(this, R.string.share_empty_place_error,
+						Toast.LENGTH_LONG).show();
 				return false;
 			}
 
-			place = mPlace; 
+			place = mPlace;
 
 			ShareKeyFragment fragment = new ShareKeyFragment();
 			fragment.setPlace(place);
 			setFragment(fragment);
 
 			return true;
-		}
-		else if(item.getItemId() == R.id.showLog) {
+		} else if (item.getItemId() == R.id.showLog) {
 			// check if user has a place
 			if (places.length == 0) {
-				Toast.makeText(this, R.string.log_empty_place_error, Toast.LENGTH_LONG).show();
+				Toast.makeText(this, R.string.log_empty_place_error,
+						Toast.LENGTH_LONG).show();
 				return false;
 			}
 			place = mPlace;// mLockListAdapter.getPlace();
@@ -321,6 +331,23 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 			setFragment(fragment);
 			return true;
 		}
+
+		// Show Shared Keys Logs to the user
+		else if (item.getItemId() == R.id.showSharedKeys) {
+			// check if user has a place
+			if (places.length == 0) {
+				Toast.makeText(this, R.string.log_empty_place_error,
+						Toast.LENGTH_LONG).show();
+				return false;
+			}
+			place = mPlace;// mLockListAdapter.getPlace();
+
+			SharedKeysInfoFragment fragment = new SharedKeysInfoFragment();
+			fragment.setPlace(place);
+			setFragment(fragment);
+			return true;
+		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -337,17 +364,15 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 	}
 
 	@Override
-	public boolean onPrepareOptionsMenu(Menu menu){
+	public boolean onPrepareOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		menu.clear();
-		if(fragmentStack.size()>0){
+		if (fragmentStack.size() > 0) {
 			inflater.inflate(fragmentStack.peek().getMenuId(), menu);
 		}
 		return true;
 	}
 
-
-	
 	private void handleIntent(Intent intent) {
 		// No extras, nothing to do
 		if (intent.getExtras() == null)
@@ -361,27 +386,30 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 			handleNFCNoLockIntent();
 	}
 
-	private void handleNFCNoLockIntent(){
-		AlertDialog alertDialog = new AlertDialog.Builder(this).setPositiveButton(getResources().getString(R.string.ok),null).create();
+	private void handleNFCNoLockIntent() {
+		AlertDialog alertDialog = new AlertDialog.Builder(this)
+				.setPositiveButton(getResources().getString(R.string.ok), null)
+				.create();
 		alertDialog.setTitle(R.string.restricted_access);
-		alertDialog.setMessage(getResources().getString(R.string.no_access_to_lock));
+		alertDialog.setMessage(getResources().getString(
+				R.string.no_access_to_lock));
 		alertDialog.show();
 	}
 
-
 	private void handleUnlockIntent(Intent intent) {
 		String sender = intent.getStringExtra("Sender");
-		if (intent.getExtras() == null){
+		if (intent.getExtras() == null) {
 			return;
 		}
 
 		int placeId = intent.getIntExtra("Place", -1);
 		for (int j = 0; j < KisiAPI.getInstance().getPlaces().length; j++) {
 			if (KisiAPI.getInstance().getPlaces()[j].getId() == placeId) {
-				LockListFragment fragment = selectItem(j+2, placeId);
+				LockListFragment fragment = selectItem(j + 2, placeId);
 				int lockId = intent.getIntExtra("Lock", -1);
-				//check if there is a lockId in the intent and then unlock the right lock
-				if(lockId != -1) {
+				// check if there is a lockId in the intent and then unlock the
+				// right lock
+				if (lockId != -1) {
 					fragment.performItemClick(lockId, sender);
 				}
 			}
@@ -389,18 +417,19 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 
 	}
 
-	private void handleHighlightIntent(Intent intent){
-		if (intent.getExtras() == null){
+	private void handleHighlightIntent(Intent intent) {
+		if (intent.getExtras() == null) {
 			return;
 		}
-		
+
 		int placeId = intent.getIntExtra("Place", -1);
 		for (int j = 0; j < KisiAPI.getInstance().getPlaces().length; j++) {
 			if (KisiAPI.getInstance().getPlaces()[j].getId() == placeId) {
-				LockListFragment fragment = selectItem(j+2, placeId);
+				LockListFragment fragment = selectItem(j + 2, placeId);
 				int lockId = intent.getIntExtra("Lock", -1);
-				//check if there is a lockId in the intent and then unlock the right lock
-				if(lockId != -1) {
+				// check if there is a lockId in the intent and then unlock the
+				// right lock
+				if (lockId != -1) {
 					fragment.highlightButton(lockId);
 				}
 			}
@@ -411,7 +440,7 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == LOGIN_REQUEST_CODE) {
-			switch(resultCode){
+			switch (resultCode) {
 			case AccountPickerActivity.LOGIN_FAILED:
 				KisiAPI.getInstance().logout();
 				Intent login = new Intent(this, AccountPickerActivity.class);
@@ -432,11 +461,10 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 				finish();
 			}
 		} else {
-			BlinkupController.getInstance().handleActivityResult(this,requestCode, resultCode, data);
+			BlinkupController.getInstance().handleActivityResult(this,
+					requestCode, resultCode, data);
 		}
 	}
-
-
 
 	public void logout() {
 		KisiAPI.getInstance().logout();
@@ -451,38 +479,38 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 		setUiIntoStartState();
 	}
 
-
-	//these methods fill the drawer with its static elements
-
+	// these methods fill the drawer with its static elements
 
 	private void buildTopDivider() {
 		LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		final TextView places = (TextView) li.inflate(R.layout.drawer_list_section_item, null);
+		final TextView places = (TextView) li.inflate(
+				R.layout.drawer_list_section_item, null);
 		places.setText(getResources().getText(R.string.place_overview));
 		mMergeAdapter.addView(places);
 
-		final View divider =  (View) li.inflate(R.layout.drawer_list_divider, null);
+		final View divider = (View) li.inflate(R.layout.drawer_list_divider,
+				null);
 		mMergeAdapter.addView(divider);
 	}
-
-
-
 
 	private void buildStaticMenuItems() {
 
 		LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		final TextView settings = (TextView) li.inflate(R.layout.drawer_list_section_item, null);
+		final TextView settings = (TextView) li.inflate(
+				R.layout.drawer_list_section_item, null);
 		settings.setText(getResources().getText(R.string.settings));
 		mMergeAdapter.addView(settings);
 
-		final View divider =  (View) li.inflate(R.layout.drawer_list_divider, null);
+		final View divider = (View) li.inflate(R.layout.drawer_list_divider,
+				null);
 		mMergeAdapter.addView(divider);
 
-		StaticMenuOnClickListener listener =  new StaticMenuOnClickListener(this);
+		StaticMenuOnClickListener listener = new StaticMenuOnClickListener(this);
 
-		final TextView refreshButton = (TextView) li.inflate(R.layout.drawer_list_item, null);
+		final TextView refreshButton = (TextView) li.inflate(
+				R.layout.drawer_list_item, null);
 		refreshButton.setId(R.id.refreshButton);
 		refreshButton.setText(getResources().getText(R.string.refresh));
 		refreshButton.setClickable(true);
@@ -491,7 +519,8 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 
 		addDivider();
 
-		final TextView setup_kisi_button = (TextView) li.inflate(R.layout.drawer_list_item, null);
+		final TextView setup_kisi_button = (TextView) li.inflate(
+				R.layout.drawer_list_item, null);
 		setup_kisi_button.setId(R.id.setup_kisi_button);
 		setup_kisi_button.setText(getResources().getText(R.string.setup));
 		setup_kisi_button.setClickable(true);
@@ -500,63 +529,68 @@ public class KisiMainActivity extends BaseActivity implements OnPlaceChangedList
 
 		addDivider();
 
-		final TextView notification = (TextView) li.inflate(R.layout.drawer_list_item, null);
+		final TextView notification = (TextView) li.inflate(
+				R.layout.drawer_list_item, null);
 		notification.setId(R.id.notification_settings_button);
-		notification.setText(getResources().getText(R.string.notification_settings));
+		notification.setText(getResources().getText(
+				R.string.notification_settings));
 		notification.setClickable(true);
 		notification.setOnClickListener(listener);
 		mMergeAdapter.addView(notification);
 
 		addDivider();
 
-		final TextView about = (TextView) li.inflate(R.layout.drawer_list_item, null);
+		final TextView about = (TextView) li.inflate(R.layout.drawer_list_item,
+				null);
 		about.setId(R.id.about_button);
 		about.setText(getResources().getText(R.string.about));
 		about.setClickable(true);
 		about.setOnClickListener(listener);
 		mMergeAdapter.addView(about);
 
-		final TextView account = (TextView) li.inflate(R.layout.drawer_list_section_item, null);
+		final TextView account = (TextView) li.inflate(
+				R.layout.drawer_list_section_item, null);
 		account.setText(getResources().getText(R.string.account));
 		mMergeAdapter.addView(account);
 
-		final View divider2 =  (View) li.inflate(R.layout.drawer_list_divider, null);
+		final View divider2 = (View) li.inflate(R.layout.drawer_list_divider,
+				null);
 		mMergeAdapter.addView(divider2);
 
-
 		accountName = (TextView) li.inflate(R.layout.drawer_list_item, null);
-		accountName.setText(KisiAPI.getInstance().getUser() == null ?  " " : KisiAPI.getInstance().getUser().getEmail() );
+		accountName.setText(KisiAPI.getInstance().getUser() == null ? " "
+				: KisiAPI.getInstance().getUser().getEmail());
 		accountName.setTextColor(Color.GRAY);
 		mMergeAdapter.addView(accountName);
 
 		addDivider();
 
-		final TextView logout = (TextView) li.inflate(R.layout.drawer_list_item, null);	
+		final TextView logout = (TextView) li.inflate(
+				R.layout.drawer_list_item, null);
 		logout.setId(R.id.logout_button);
 		logout.setText(getResources().getText(R.string.logout));
 		logout.setClickable(true);
 		logout.setOnClickListener(listener);
 		mMergeAdapter.addView(logout);
 
-
-
-
 	}
 
 	private void addDivider() {
 		LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		final View divider =  (View) li.inflate(R.layout.drawer_list_small_divider, null);
+		final View divider = (View) li.inflate(
+				R.layout.drawer_list_small_divider, null);
 		mMergeAdapter.addView(divider);
 	}
 
-	protected void setActiveSettingsView(View view, int position){
-		if(settingsView!=null){
+	protected void setActiveSettingsView(View view, int position) {
+		if (settingsView != null) {
 			settingsView.setTextColor(Color.BLACK);
-			settingsView=null;
+			settingsView = null;
 		}
 		mDrawerListAdapter.selectItem(-1);
-		mDrawerList.setItemChecked(6+position+mDrawerListAdapter.getCount(), true);
-		settingsView = (TextView)view; 
+		mDrawerList.setItemChecked(
+				6 + position + mDrawerListAdapter.getCount(), true);
+		settingsView = (TextView) view;
 		settingsView.setTextColor(Color.WHITE);
 	}
 
