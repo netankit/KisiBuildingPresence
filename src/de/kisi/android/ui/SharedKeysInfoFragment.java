@@ -106,10 +106,15 @@ public class SharedKeysInfoFragment extends BaseFragment implements
 					.findViewById(R.id.sharedLockName);
 			String new_temp = null;
 			for (String item : unique_keys.get(position).locks) {
-				new_temp = item + " ";
+				if (new_temp != null) {
+					new_temp = item + ", " + new_temp;
+				} else {
+					new_temp = item;
+				}
+
 			}
 			new_temp = new_temp.trim();
-			new_temp.substring(0, new_temp.length() - 1);
+			// new_temp.substring(0, new_temp.length() - 1);
 
 			sharedLockNameView.setText(new_temp);
 
