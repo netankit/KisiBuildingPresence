@@ -1,14 +1,17 @@
 package de.kisi.android.ui;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import de.kisi.android.R;
@@ -41,46 +44,79 @@ public class SharedKeysInfoFragment extends BaseFragment implements
 		}
 	}
 
+	class UniqueKey {
+		String issued_to_email;
+		List<String> locks;
+	}
+
 	class SharedKeysInfoLogAdapter extends BaseAdapter {
 
-		private List<Key> events;
 		private LayoutInflater inflater;
+		private List<UniqueKey> unique_keys;
 
 		public SharedKeysInfoLogAdapter(List<Key> events) {
 			super();
-			this.events = events;
+			HashMap<String, List<String>> hashMap = new HashMap<String, List<String>>();
+			for (Key key : events) {
+				List<String> lst = hashMap.get(key.getIssued_to_email());
+				if (lst == null) {
+					lst = new ArrayList<String>();
+				}
+				lst.add(key.getLock().getName());
+				hashMap.put(key.getIssued_to_email(), lst);
+			}
+			Set<String> keySet = hashMap.keySet();
+			unique_keys = new ArrayList<UniqueKey>();
+			for (String key_temp : keySet) {
+				UniqueKey unkey = new UniqueKey();
+				unkey.issued_to_email = key_temp;
+				unkey.locks = hashMap.get(key_temp);
+				unique_keys.add(unkey);
+			}
+
 			inflater = (LayoutInflater) getActivity().getSystemService(
 					Context.LAYOUT_INFLATER_SERVICE);
 		}
 
 		@Override
 		public int getCount() {
-			return events.size();
+			return unique_keys.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			return events.get(position);
+			return unique_keys.get(position);
 		}
 
 		@Override
 		public long getItemId(int position) {
-			return events.get(position).getId();
+			return position;
 		}
 
+		// TODO Recheck -- Ankit Bahuguna
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View vi = convertView;
 			if (vi == null)
 				vi = inflater.inflate(R.layout.sharedkeyslog_list_item, null);
+
 			TextView userEmailView = (TextView) vi.findViewById(R.id.userEmail);
-			userEmailView.setText(events.get(position).getIssued_to_email());
-			Log.v("Test Path Email View", events.get(position)
-					.getIssued_to_email());
+			userEmailView.setText(unique_keys.get(position).issued_to_email);
 			TextView sharedLockNameView = (TextView) vi
 					.findViewById(R.id.sharedLockName);
-			sharedLockNameView
-					.setText(events.get(position).getLock().getName());
+			String new_temp = null;
+			for (String item : unique_keys.get(position).locks) {
+				new_temp = item + " ";
+			}
+			new_temp = new_temp.trim();
+			new_temp.substring(0, new_temp.length() - 1);
+
+			sharedLockNameView.setText(new_temp);
+
+			ImageView imageView = (ImageView) vi
+					.findViewById(R.id.onlineUserGreenDot);
+			imageView.invalidate();
+
 			return vi;
 		}
 	}

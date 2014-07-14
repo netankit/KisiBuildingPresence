@@ -14,7 +14,7 @@ import de.kisi.android.api.calls.CreateGatewayCall;
 import de.kisi.android.api.calls.CreateNewKeyCall;
 import de.kisi.android.api.calls.GenericCall;
 import de.kisi.android.api.calls.GetLogs;
-import de.kisi.android.api.calls.GetSharedKeysLogInfo;
+import de.kisi.android.api.calls.UpdateKeysCall;
 import de.kisi.android.api.calls.LocatorBoundaryCrossingCall;
 import de.kisi.android.api.calls.LocatorBoundaryCrossingCall.BoundaryCrossing;
 import de.kisi.android.api.calls.LoginCall;
@@ -204,7 +204,7 @@ public class KisiAPI {
 
 	public void getSharedKeysLogsInfo(Place place,
 			final SharedKeyInfoCallback callback) {
-		new GetSharedKeysLogInfo(place, callback).send();
+		new UpdateKeysCall(place, callback).send();
 	}
 
 	public void getLogs(Place place, final LogsCallback callback) {
