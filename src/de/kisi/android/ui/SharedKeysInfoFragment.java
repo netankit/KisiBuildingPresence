@@ -19,12 +19,22 @@ import de.kisi.android.api.KisiAPI;
 import de.kisi.android.api.SharedKeyInfoCallback;
 import de.kisi.android.model.Key;
 
+/**
+ * This fragment extends BaseFragment and implements the SharedKeyInfoCallback,
+ * to generate a list of all the shared keys to various user by the user. This
+ * fragment is invoked within the KisiMainActivity.
+ * 
+ * @author Ankit
+ */
 public class SharedKeysInfoFragment extends BaseFragment implements
 		SharedKeyInfoCallback {
 
 	private ListView mListView;
 
 	@Override
+	/** 
+	 * Creates the default android view
+	 */
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
@@ -36,9 +46,13 @@ public class SharedKeysInfoFragment extends BaseFragment implements
 		return view;
 	}
 
-	public void onSharedLogsInfoResult(List<Key> events) {
+	/**
+	 * Invokes the setAdapter with the parameter of a new object of
+	 * SharedKeysInfoLogAdapter with keyList as its parameter
+	 */
+	public void onSharedLogsInfoResult(List<Key> keyList) {
 		try {
-			mListView.setAdapter(new SharedKeysInfoLogAdapter(events));
+			mListView.setAdapter(new SharedKeysInfoLogAdapter(keyList));
 		} catch (Exception e) {
 
 		}
@@ -93,7 +107,6 @@ public class SharedKeysInfoFragment extends BaseFragment implements
 			return position;
 		}
 
-		// TODO Recheck -- Ankit Bahuguna
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View vi = convertView;
@@ -114,8 +127,6 @@ public class SharedKeysInfoFragment extends BaseFragment implements
 
 			}
 			new_temp = new_temp.trim();
-			// new_temp.substring(0, new_temp.length() - 1);
-
 			sharedLockNameView.setText(new_temp);
 
 			ImageView imageView = (ImageView) vi
