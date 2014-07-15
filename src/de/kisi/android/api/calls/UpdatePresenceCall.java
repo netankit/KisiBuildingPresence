@@ -17,6 +17,16 @@ import de.kisi.android.api.SharedKeyInfoCallback;
 import de.kisi.android.model.Key;
 import de.kisi.android.model.Place;
 
+/**
+ * This API Call allows to get all data over HTTP from the server end point:
+ * places/place_id/members_present. The data is in Json format and thus we use
+ * GSON library to parse the data and then invoke the relevant callback.
+ * 
+ * @currentState: Dormant!
+ * @author Ankit
+ * 
+ */
+
 public class UpdatePresenceCall extends GenericCall {
 
 	public UpdatePresenceCall(Place place, final SharedKeyInfoCallback callback) {
@@ -35,6 +45,8 @@ public class UpdatePresenceCall extends GenericCall {
 				for (int i = 0; i < jsonArray.length(); i++) {
 					Key event = null;
 					try {
+						// TODO: Create a new Data Model for this class and
+						// replace with Keys.class
 						event = gson.fromJson(jsonArray.getJSONObject(i)
 								.toString(), Key.class);
 						// Log.v(path, jsonArray.getJSONObject(i).toString());

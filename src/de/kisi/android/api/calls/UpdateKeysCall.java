@@ -17,6 +17,15 @@ import de.kisi.android.api.SharedKeyInfoCallback;
 import de.kisi.android.model.Key;
 import de.kisi.android.model.Place;
 
+/**
+ * This API Call allows to get all data over HTTP from the server end point:
+ * places/place_id/keys. The data is in json format and thus we use GSON library
+ * to parse the data and then invoke the relevant callback. A new data model is
+ * introduced: Key.class (key.java)
+ * 
+ * @author Ankit
+ * 
+ */
 public class UpdateKeysCall extends GenericCall {
 
 	public UpdateKeysCall(Place place, final SharedKeyInfoCallback callback) {

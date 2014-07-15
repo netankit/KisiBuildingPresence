@@ -332,7 +332,11 @@ public class KisiMainActivity extends BaseActivity implements
 			return true;
 		}
 
-		// Show Shared Keys Logs to the user
+		/**
+		 * When the user selects the option: "Get Shared Keys Log", from the
+		 * action bar menu then set a new SharedKeysInfoFragment and return
+		 * True.
+		 */
 		else if (item.getItemId() == R.id.showSharedKeys) {
 			// check if user has a place
 			if (places.length == 0) {
@@ -341,9 +345,11 @@ public class KisiMainActivity extends BaseActivity implements
 				return false;
 			}
 			place = mPlace;// mLockListAdapter.getPlace();
-
+			// Creates a new SharedKeysInfoFragment object.
 			SharedKeysInfoFragment fragment = new SharedKeysInfoFragment();
+			// Set a place for that fragment
 			fragment.setPlace(place);
+			// Set the fragment
 			setFragment(fragment);
 			return true;
 		}

@@ -3,6 +3,17 @@ package de.kisi.android.model;
 import com.google.gson.annotations.SerializedName;
 import com.j256.ormlite.field.DatabaseField;
 
+/**
+ * Data Model : Key The UpdateKeysCall allows to get all data over HTTP from the
+ * server end point: places/place_id/keys. The data is in json format, we need
+ * specific part of the data and it is defined in this data model. Important
+ * information like place_id, issued_to_email, issued_to_id, lock_id and lock
+ * are defined and necessary getters and setters are defined for easy access.
+ * 
+ * @author Ankit
+ * 
+ */
+
 public class Key {
 
 	private int id;
