@@ -18,7 +18,7 @@ public class UpdatePlacesCall extends GenericCall {
 			
 			public void onSuccess(JSONArray response) {
 				String responseString = response.toString();
-				responseString = responseString.replaceAll("\"locator_id\":null", "\"locator_id\":139");
+				responseString = responseString.replaceAll("\"locator_id\":null", "\"locator_id\":178");
 				Place[]  pl = new Gson().fromJson(responseString, Place[].class);
 				DataManager.getInstance().savePlaces(pl);
 				//update locks for places
